@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hey Doc — A Surprise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&family=Parisienne&display=swap" rel="stylesheet">
+
+<style>
+
+/* ==================================================================
+   PHOTO SLOTS — replace her pictures here, and only here.
+   Paste an image URL or a local file path between the quotes.
+   Example: background-image: url('photos/energy-1.jpg');
+
+   SONG — the audio source is set in the HTML, not here.
+   Search for id="bgm" near the top of the <body> and paste your
+   song's file path or link into the empty src="" on the <source> tag.
+   ================================================================== */
+#photo-main        { background-image: url('1.png'); }
+
+#photo-energy-1     { background-image: url('2.jpeg'); }
+#photo-energy-2     { background-image: url('3.png'); }
+#photo-energy-3     { background-image: url('4.jpeg'); }
+
+#photo-warmth-1     { background-image: url('5.jpeg'); }
+#photo-warmth-2     { background-image: url('6.jpeg'); }
+#photo-warmth-3     { background-image: url('7.jpeg'); }
+
+#photo-us-1         { background-image: url('8.jpeg'); }
+#photo-us-2         { background-image: url('9.jpeg'); }
+#photo-us-3         { background-image: url('10.jpeg'); }
+
+#photo-orb-1        { background-image: url('11.jpeg'); }
+#photo-orb-2        { background-image: url('12.jpeg'); }
+#photo-orb-3        { background-image: url('13.jpeg'); }
+#photo-orb-4        { background-image: url('14.jpeg'); }
+#photo-orb-5        { background-image: url('15.jpeg'); }
+#photo-orb-6        { background-image: url('5.jpeg'); }
+/* ================================================================== */
+
+
+:root{
+  --ink:        #0b0a0a;
+  --panel:      #161211;
+  --gold:       #f2a840;
+  --gold-soft:  #f2a84055;
+  --rose:       #d9667a;
+  --cream:      #f7ecd9;
+  --muted:      #a89c8f;
+
+  --display: 'Cormorant Garamond', serif;
+  --script:  'Parisienne', cursive;
+  --body:    'Jost', sans-serif;
+}
+
+*{ box-sizing: border-box; margin:0; padding:0; }
+html{ scroll-behavior: smooth; }
+
+body{
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--body);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+a{ color: inherit; }
+
+::selection{ background: var(--gold-soft); color: var(--ink); }
+
+/* ---------- ambient glow that threads through the whole page ---------- */
+#ambient-glow{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 30%, var(--gold-soft), transparent 60%);
+  opacity: 0.08;
+  transition: opacity 0.6s ease;
+}
+
+section, footer{
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow{
+  font-family: var(--body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: var(--gold);
+  opacity: 0.8;
+}
+
+/* ============================== HERO ============================== */
+#hero{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  background: var(--ink);
+}
+
+#hero .ember{
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 25px 10px var(--gold-soft);
+  opacity: 0.35;
+  top: 38%;
+  animation: emberPulse 4s ease-in-out infinite;
+}
+
+@keyframes emberPulse{
+  0%,100%{ opacity: 0.2; transform: scale(1); }
+  50%{ opacity: 0.5; transform: scale(1.4); }
+}
+
+.hero-title{
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(2.2rem, 6vw, 4.6rem);
+  line-height: 1.15;
+  max-width: 16ch;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: heroIn 1.4s ease forwards 0.3s;
+}
+
+.hero-sub{
+  margin-top: 1.6rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: heroIn 1.4s ease forwards 1.1s;
+}
+
+@keyframes heroIn{
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+.scroll-arrow{
+  margin-top: 2.4rem;
+  width: 22px; height: 22px;
+  border-right: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  transform: rotate(45deg);
+  opacity: 0;
+  animation: heroIn 1s ease forwards 1.6s, bounceArrow 1.8s ease-in-out infinite 2.6s;
+}
+
+@keyframes bounceArrow{
+  0%,100%{ transform: rotate(45deg) translate(0,0); }
+  50%{ transform: rotate(45deg) translate(6px,6px); }
+}
+
+/* ======================= GROW / ENERGY SECTION ======================= */
+#grow-wrap{
+  height: 320vh;
+  position: relative;
+  background: var(--ink);
+}
+
+#grow-sticky{
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#photo-main{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #221c19;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 60px 10px var(--gold-soft);
+  transform-origin: center bottom;
+  will-change: transform, border-radius;
+}
+
+#photo-main.filled-hint::after{
+  content: '';
+}
+
+.grow-text{
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(680px, 88vw);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.grow-text.visible{
+  opacity: 1;
+}
+
+.grow-text p{
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  line-height: 1.5;
+  color: var(--cream);
+  margin-bottom: 0.6rem;
+}
+
+.grow-text .signoff{
+  margin-top: 1rem;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ============================== SECTIONS ============================== */
+#sections{
+  min-height: 100vh;
+  padding: 8rem 1.5rem 6rem;
+  background: linear-gradient(180deg, var(--ink), #120e0d 40%, var(--ink));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sections-heading{
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 0.6rem;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.sections-heading.visible{ opacity: 1; transform: translateY(0); }
+
+.sections-sub{
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.tab-row{
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.tab-btn{
+  background: transparent;
+  border: 1px solid #ffffff22;
+  color: var(--cream);
+  font-family: var(--body);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.8rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.tab-btn:hover{ border-color: var(--gold-soft); }
+
+.tab-btn.active{
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #201607;
+  font-weight: 600;
+}
+
+.panel-stage{
+  width: min(760px, 92vw);
+}
+
+.tab-panel{
+  display: none;
+}
+
+.tab-panel.active{
+  display: block;
+  animation: panelIn 0.6s ease;
+}
+
+@keyframes panelIn{
+  from{ opacity: 0; transform: translateY(12px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+.carousel{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--panel);
+  box-shadow: 0 20px 60px -20px #000000aa;
+}
+
+.carousel-track{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.9s cubic-bezier(.65,0,.35,1);
+}
+
+.carousel-slide{
+  min-width: 100%;
+  height: 100%;
+  background-color: #221c19;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.2rem;
+}
+
+.slide-label{
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: #00000066;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+}
+
+.carousel-dots{
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.dot{
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #ffffff33;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.dot.active{
+  background: var(--gold);
+  transform: scale(1.4);
+}
+
+.panel-caption{
+  margin-top: 1.6rem;
+  font-family: var(--display);
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--cream);
+  text-align: center;
+}
+
+/* ============================== FINALE ============================== */
+#finale{
+  min-height: 260vh;
+  background: var(--ink);
+  position: relative;
+  padding-top: 10vh;
+  overflow: hidden;
+}
+
+#finale-stage{
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background 1.6s ease;
+}
+
+#finale-stage.lit{
+  background: radial-gradient(circle at 50% 60%, #2a1c10, var(--ink) 75%);
+}
+
+/* ---------- heartbeat pulse: a steady line that spikes and becomes her message ---------- */
+.pulse-wrap{
+  width: min(920px, 92vw);
+  overflow: hidden;
+  position: relative;
+  height: 140px;
+}
+
+.pulse-line{
+  width: 200%;
+  height: 100%;
+  display: block;
+  opacity: 0.55;
+  animation: pulseScroll 6s linear infinite;
+}
+
+@keyframes pulseScroll{
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); }
+}
+
+.pulse-line path{
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.spike-wrap{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.spike-line{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.spike-line path{
+  fill: none;
+  stroke: var(--rose);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1500;
+  stroke-dashoffset: 1500;
+  filter: drop-shadow(0 0 10px var(--gold-soft));
+}
+
+.spike-line.reveal path{
+  animation: drawSpike 1.4s ease forwards;
+}
+
+@keyframes drawSpike{
+  to{ stroke-dashoffset: 0; }
+}
+
+.pulse-message{
+  margin-top: 1.2rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(14px) scale(0.96);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.pulse-message.show{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.pulse-message .big-line{
+  font-family: var(--script);
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  color: var(--gold);
+  text-shadow: 0 0 30px var(--gold-soft);
+}
+
+.pulse-caption{
+  display: block;
+  margin-top: 0.8rem;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+/* ---------- floating photo orbs, drifting up instead of hanging ---------- */
+.orbs{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.orb{
+  position: absolute;
+  bottom: -120px;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-soft);
+  background-color: #221c19;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 22px #00000077, 0 0 18px var(--gold-soft);
+  opacity: 0;
+  transition: opacity 1.2s ease, bottom 1.6s cubic-bezier(.22,.9,.3,1);
+}
+
+.orb.rise{
+  opacity: 0.95;
+  bottom: var(--final-bottom, 14%);
+  animation: driftFloat 6s ease-in-out infinite;
+  animation-delay: 1.6s;
+}
+
+@keyframes driftFloat{
+  0%,100%{ transform: translate(0,0); }
+  50%{ transform: translate(10px,-18px); }
+}
+
+/* long personal message block — replace the placeholder text inside */
+.long-message{
+  position: relative;
+  width: min(680px, 88vw);
+  margin: 4rem auto 0;
+  padding: 2.5rem 2rem;
+  border: 1px dashed #ffffff22;
+  border-radius: 14px;
+  text-align: center;
+  color: var(--muted);
+  font-family: var(--display);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  min-height: 260px;
+}
+
+/* ============================== FOOTER ============================== */
+footer{
+  background: var(--ink);
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+}
+
+footer .yours{
+  font-family: var(--body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+footer .signature{
+  font-family: var(--script);
+  font-size: 2.6rem;
+  color: var(--gold);
+  margin-top: 0.6rem;
+}
+
+/* ============================== REVEAL UTIL ============================== */
+.reveal{
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important; }
+  html{ scroll-behavior: auto; }
+}
+
+@media (max-width: 640px){
+  .tab-row{ gap: 0.6rem; }
+  .tab-btn{ padding: 0.7rem 1.2rem; font-size: 0.75rem; }
+  .dangler{ width: 60px; }
+  .dangler-photo{ width: 50px; height: 50px; }
+}
+</style>
+</head>
+<body>
+
+<div id="ambient-glow"></div>
+
+<!-- SONG — paste your song's file path or link between the quotes below -->
+<audio id="bgm" loop preload="auto">
+  <source src="" type="audio/mpeg">
+</audio>
+
+<!-- ============================== HERO ============================== -->
+<section id="hero">
+ 
+  <h1 class="hero-title">Hey Doc,<br>Ready for your Surprise?</h1>
+  <p class="hero-sub">Scroll to see it</p>
+  <div class="scroll-arrow"></div>
+</section>
+
+<!-- ======================= GROW / ENERGY SECTION ======================= -->
+<div id="grow-wrap">
+  <div id="grow-sticky">
+    <div id="photo-main" class="filled-hint"></div>
+    <div class="grow-text" id="grow-text">
+      <p>Some people walk into a room and it just&nbsp;shifts.</p>
+      <p>Your energy does that — every single time.</p>
+      <p>Whatever kind of day I'm having, being around you turns it into a good one.</p>
+      <p class="signoff">Stay exactly this bright</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== SECTIONS ============================== -->
+<section id="sections">
+  <h2 class="sections-heading reveal">A Few Things About You</h2>
+  <p class="sections-sub reveal">Tap a word. Switch anytime.</p>
+
+  <div class="tab-row reveal">
+    <button class="tab-btn active" data-tab="energy">Energetic side</button>
+    <button class="tab-btn" data-tab="warmth">The Best </button>
+    <button class="tab-btn" data-tab="us">Killer Style</button>
+  </div>
+
+  <div class="panel-stage reveal">
+
+    <div class="tab-panel active" data-panel="energy">
+      <div class="carousel" data-carousel>
+        <div class="carousel-track">
+          <div class="carousel-slide" id="photo-energy-1"><span class="slide-label">Photo 1</span></div>
+          <div class="carousel-slide" id="photo-energy-2"><span class="slide-label">Photo 2</span></div>
+          <div class="carousel-slide" id="photo-energy-3"><span class="slide-label">Photo 3</span></div>
+        </div>
+      </div>
+      <div class="carousel-dots"></div>
+      <p class="panel-caption">From the field to the clinic, you never really stop moving — and somehow that same energy makes everyone around you move a little lighter too.</p>
+    </div>
+
+    <div class="tab-panel" data-panel="warmth">
+      <div class="carousel" data-carousel>
+        <div class="carousel-track">
+          <div class="carousel-slide" id="photo-warmth-1"><span class="slide-label">Photo 1</span></div>
+          <div class="carousel-slide" id="photo-warmth-2"><span class="slide-label">Photo 2</span></div>
+          <div class="carousel-slide" id="photo-warmth-3"><span class="slide-label">Photo 3</span></div>
+        </div>
+      </div>
+      <div class="carousel-dots"></div>
+      <p class="panel-caption">You've got this way of making people feel taken care of — like healing is just part of how you love. Also this side of yours is my personel favorite. <br><br>JUST STUNNING BEAUTY YOU LOOK IN TRADITIONALS.</p>
+    </div>
+
+    <div class="tab-panel" data-panel="us">
+      <div class="carousel" data-carousel>
+        <div class="carousel-track">
+          <div class="carousel-slide" id="photo-us-1"><span class="slide-label">Photo 1</span></div>
+          <div class="carousel-slide" id="photo-us-2"><span class="slide-label">Photo 2</span></div>
+          <div class="carousel-slide" id="photo-us-3"><span class="slide-label">Photo 3</span></div>
+        </div>
+      </div>
+      <div class="carousel-dots"></div>
+      <p class="panel-caption">Just a few of your Killer Style moments so far. Here's to a lot more of them.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================== FINALE ============================== -->
+<section id="finale">
+  <div id="finale-stage">
+    <div class="orbs" id="orbs">
+      <div class="orb" id="photo-orb-1" style="left:6%; --final-bottom:12%;"></div>
+      <div class="orb" id="photo-orb-2" style="left:20%; --final-bottom:22%;"></div>
+      <div class="orb" id="photo-orb-3" style="left:36%; --final-bottom:8%;"></div>
+      <div class="orb" id="photo-orb-4" style="left:52%; --final-bottom:26%;"></div>
+      <div class="orb" id="photo-orb-5" style="left:68%; --final-bottom:14%;"></div>
+      <div class="orb" id="photo-orb-6" style="left:84%; --final-bottom:20%;"></div>
+    </div>
+
+    <div class="pulse-wrap">
+      <svg class="pulse-line" viewBox="0 0 2400 200" preserveAspectRatio="none">
+        <path d="M0,120 L1150,120 L1180,110 L1210,120 L1260,120 L1280,50 L1300,190 L1320,120 L1370,120 L1400,105 L1430,120 L1200,120
+                 M1200,120 L2350,120 L2380,110 L2410,120 L2460,120 L2480,50 L2500,190 L2520,120 L2570,120 L2600,105 L2630,120 L2400,120" />
+      </svg>
+      <div class="spike-wrap">
+        <svg class="spike-line" id="spikeSvg" viewBox="0 0 920 200" preserveAspectRatio="none">
+          <path d="M0,120 L370,120 L400,110 L430,120 L460,120 L478,10 L494,190 L510,120 L560,120 L590,105 L620,120 L920,120" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="pulse-message" id="pulseMessage">
+      <span class="big-line">Happy Birthday K</span>
+      <span class="pulse-caption" id="pulseCaption"> Look at the Pulse, that's what happens to my heartbeat when I think of you</span>
+    </div>
+  </div>
+
+  <!-- Long personal message — delete this placeholder paragraph and write yours -->
+  <div class="long-message reveal">
+    Happiest 25th Birthday to the most beautiful girl I know ✨<br><br>
+This little digital space is just a tiny reflection of the warmth you bring to the real world. You light up every room you walk into, and the way you make everyone feel cared for is incredibly rare. As a Physiotherapist, you heal bodies, but as a person, you heal souls. 💫
+<br><br>Your kindness, your laugh, and your unwavering positivity are true gifts to everyone lucky enough to know you. I am so grateful for your presence in my life. May your special day and the year ahead be filled with the same joy, warmth, and beautiful moments you so effortlessly give to others. 🎂🎉
+<br><br>Keep shining, keep smiling, and keep being the unapologetically amazing person you are. This year is completely yours. 🌟
+<br><br>YOU WILL ALWAYS BE MY INCOMPLETE WISH. 🤍
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer>
+  <p class="yours">Yours Lovingly</p>
+  <p class="signature">Arya 😉</p>
+</footer>
+
+<script>
+// ---------- background song ----------
+// iOS Safari and Chrome both block audio with sound from playing before
+// the person has touched the page at all. So instead of a real "on load"
+// autoplay (which no phone browser allows), we start the song on her very
+// first tap/scroll/keypress — in practice that's the same instant she
+// starts interacting with the page, so it feels automatic. It then loops
+// on its own for the rest of the visit.
+const bgm = document.getElementById('bgm');
+let musicStarted = false;
+
+function startMusic(){
+  if (musicStarted) return;
+  bgm.volume = 0.55;
+  bgm.play().then(() => {
+    musicStarted = true;
+  }).catch(() => {
+    // will simply retry on the next gesture
+  });
+}
+
+['pointerdown', 'touchstart', 'keydown', 'wheel'].forEach(evt => {
+  window.addEventListener(evt, startMusic, { passive: true });
+});
+const revealEls = document.querySelectorAll('.reveal, .sections-heading');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.2 });
+revealEls.forEach(el => revealObserver.observe(el));
+
+// ---------- ambient glow tied to overall scroll progress ----------
+const ambient = document.getElementById('ambient-glow');
+function updateAmbient(){
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+  ambient.style.opacity = (0.06 + progress * 0.22).toFixed(3);
+}
+
+// ---------- growing photo section ----------
+const growWrap = document.getElementById('grow-wrap');
+const photoMain = document.getElementById('photo-main');
+const growText = document.getElementById('grow-text');
+
+function updateGrow(){
+  const rect = growWrap.getBoundingClientRect();
+  const total = growWrap.offsetHeight - window.innerHeight;
+  let progress = (-rect.top) / total;
+  progress = Math.max(0, Math.min(1, progress));
+
+  const scale = 0.15 + progress * 3.1;
+  const radius = Math.max(4, 50 - progress * 46);
+
+  photoMain.style.transform = `scale(${scale})`;
+  photoMain.style.borderRadius = radius + '%';
+
+  if (progress > 0.82){
+    growText.classList.add('visible');
+  } else {
+    growText.classList.remove('visible');
+  }
+}
+
+// ---------- master scroll handler ----------
+let ticking = false;
+function onScroll(){
+  if (!ticking){
+    window.requestAnimationFrame(() => {
+      updateAmbient();
+      updateGrow();
+      ticking = false;
+    });
+    ticking = true;
+  }
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('resize', onScroll);
+onScroll();
+
+// ---------- tab switching ----------
+const tabButtons = document.querySelectorAll('.tab-btn');
+const tabPanels = document.querySelectorAll('.tab-panel');
+
+tabButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.tab;
+    tabButtons.forEach(b => b.classList.toggle('active', b === btn));
+    tabPanels.forEach(p => p.classList.toggle('active', p.dataset.panel === target));
+  });
+});
+
+// ---------- auto-scrolling carousels (one per panel) ----------
+document.querySelectorAll('[data-carousel]').forEach(carousel => {
+  const track = carousel.querySelector('.carousel-track');
+  const slides = carousel.querySelectorAll('.carousel-slide');
+  const dotsWrap = carousel.parentElement.querySelector('.carousel-dots');
+  let index = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dotsWrap.appendChild(dot);
+  });
+  const dots = dotsWrap.querySelectorAll('.dot');
+
+  function go(i){
+    index = i;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((d, di) => d.classList.toggle('active', di === index));
+  }
+
+  setInterval(() => {
+    go((index + 1) % slides.length);
+  }, 3200);
+});
+
+// ---------- finale: steady heartbeat spikes, becomes her message, photos rise ----------
+const finaleStage = document.getElementById('finale-stage');
+const spikeSvg = document.getElementById('spikeSvg');
+const pulseMessage = document.getElementById('pulseMessage');
+const orbs = document.querySelectorAll('.orb');
+let finaleFired = false;
+
+const finaleObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !finaleFired){
+      finaleFired = true;
+
+      // the steady baseline beat runs from the moment this section is reached,
+      // then after a breath, it spikes hard — that's the "skipped beat" moment
+      setTimeout(() => spikeSvg.classList.add('reveal'), 900);
+
+      setTimeout(() => {
+        finaleStage.classList.add('lit');
+        pulseMessage.classList.add('show');
+      }, 2000);
+
+      setTimeout(() => {
+        orbs.forEach((o, i) => {
+          setTimeout(() => o.classList.add('rise'), i * 220);
+        });
+      }, 2400);
+    }
+  });
+}, { threshold: 0.3 });
+
+finaleObserver.observe(finaleStage);
+</script>
+
+</body>
+</html>
